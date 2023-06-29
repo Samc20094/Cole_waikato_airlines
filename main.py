@@ -37,7 +37,7 @@ def age():
         print("congratulations you will get a discount on our child and seniority policy!")
         discount.append(age)
         tickets()
-    if (age <1 or age >100):
+    if (age < 1 or age > 122):
         print("invalid input")
 
 
