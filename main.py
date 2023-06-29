@@ -32,11 +32,14 @@ def starter():
 
 
 def age():
-    age = int(input("hello {} how old are you? "))
+    last_element = name_list[-1]
+    age = int(input("hello {} how old are you? ".format(last_element)))
     if (age <16 or age >65):
         print("congratulations you will get a discount on our child and seniority policy!")
         discount.append(age)
         tickets()
+    else:
+        tickets() 
     if (age < 1 or age > 122):
         print("invalid input")
 
@@ -80,7 +83,7 @@ def otherusers():
                 continue
             if Str_name.isalpha() == True:
                 print(name_list, discount)
-                tickets()
+                age()
         except:
             Str_name.isalpha() == False
             print("invalid input")
