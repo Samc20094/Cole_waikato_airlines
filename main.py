@@ -1,104 +1,100 @@
-
-global name_list
-global age
-name_list = []
-ticket_list = []
-discount = []
-
-def kill():
-    while kill() == True:
-        SystemExit()
-
-
-def starter():
-    global Str_name
-    starter = True
-    while starter == True:
-        try:
-            name_list.clear()
-            Str_name = str(input("Hello welcome to waikato airlines!, what is your name? ")).strip().title()
-            name_list.append(Str_name)
-            if len(Str_name) < 3 or len(Str_name)> 35:
-                print("invalid input")
-                continue
-            if Str_name.isalpha() == True:
-                age()
-                
-        except: 
-            Str_name.isalpha() == False
-            print("invalid input")
-            continue
-            return Str_name
-
+passenger_data = []
+import os
+import time
+            
+def clear_console():
+    if os.name == 'posix':
+        _ = os.system('clear')
+    else:
+        _ = os.system('cls')
 
 def age():
-    last_element = name_list[-1]
-    age = int(input("hello {} how old are you? ".format(last_element)))
-    if (age <16 or age >65):
-        print("congratulations you will get a discount on our child and seniority policy!")
-        discount.append(age)
-        tickets()
-    else:
-        tickets() 
-    if (age < 1 or age > 122):
-        print("invalid input")
-
-
-def tickets():
-    last_element = name_list[-1]
-    auckland_ticket = 54
-    wellington_ticket = 58
-    waikato_ticket = 59    
-    ticket = str(input("Hello {} Where will you flying today? (auckland, wellington, waikato) ".format(last_element)))
-    if ticket == "auckland":
-        print("okay {} that will be ${}".format(last_element, auckland_ticket))
-        ticket_list.append(54)
-        otherusers()
-    elif ticket == "wellington":
-        print("okay {} that will be ${}".format(last_element, wellington_ticket))
-        ticket_list.append(58)
-        otherusers()
-
-    elif ticket == "waikato":
-        print("okay {} that will be ${}".format(last_element, waikato_ticket))
-        ticket_list.append(59)
-        otherusers()
-        
-    else:
-        print("invalid input")
-        tickets()
-
-
-def otherusers():
-    extras = str(input("will there be any other travelers? "))
-    if extras == "no":
-        total()
-        
-    while extras == "yes":
-        try:
-            Str_name = input("what is their name? ")
-            name_list.append(Str_name)
-            if len(Str_name) < 3 or len(Str_name)> 35:
-                print("invalid input")
-                continue
-            if Str_name.isalpha() == True:
-                print(name_list, discount)
-                age()
-        except:
-            Str_name.isalpha() == False
-            print("invalid input")
-            continue
-            return Str_name
+    last_element = passenger_data[-1]["Name"]
+    age = int(input("Hello {} how old are you? ".format(last_element)))
     
+    if 16 <= age <= 65:
+        auckland_ticket = 54
+        wellington_ticket = 58
+        waikato_ticket = 59
+        print("You are eligible for standard ticket prices.")
+        time.sleep(2)
+        clear_console()
+    elif 0 <= age < 16 or age > 65:
+        auckland_ticket = 37.80
+        wellington_ticket = 40.60
+        waikato_ticket = 41.30
+        print("Congratulations! You will get a discount on our child and seniority policy!")
+        time.sleep(2)
+        clear_console()
+    else:
+        print("Invalid age.")
+        return None
+    
+    ticket_prices = {
+        "auckland": auckland_ticket,
+        "wellington": wellington_ticket,
+        "waikato": waikato_ticket
+    }
+    
+    tickets(ticket_prices, age)
+
+def starter():
+    Str_name = str(input("Hello, welcome to Waikato Airlines! What is your name? ")).strip().title()
+    
+    if len(Str_name) < 3 or len(Str_name) > 35:
+        print("Invalid input, the name must be between 3 and 35 characters long.")
+        return
+    
+    if Str_name.isalpha() == True:
+        passenger_data.append({"Name": Str_name})
+        age()
+    else:
+        print("Please use letters only")
+
+def tickets(ticket_prices, age):
+    last_element = passenger_data[-1]["Name"]
+    ticket = input("Hello {} Where will you be flying today? (auckland, wellington, waikato) ".format(last_element)).strip().lower()
+
+    if ticket in ticket_prices:
+        print("Enjoy your flight, {}".format(last_element))
+        passenger_data[-1]["Age"] = age
+        passenger_data[-1]["Destination"] = ticket
+        passenger_data[-1]["Ticket Price"] = ticket_prices[ticket]
+    else:
+        print("Invalid input, please select auckland, wellington, or waikato.")
+        tickets(ticket_prices, age)
+
+def other_users():
+    extras = input("Will there be any other travelers? (yes/no) ").strip().lower()
+    
+    if extras == "yes":
+        while extras == "yes":
+            time.sleep(2)
+            clear_console()
+            Str_name = input("What is their name? ").strip().title()
+            if len(Str_name) < 3 or len(Str_name) > 35:
+                print("Invalid input")
+            elif Str_name.isalpha() == True:
+                passenger_data.append({"Name": Str_name})
+                age()
+            else:
+                print("Please use letters only")
+            
+            extras = input("Will there be any other travelers? (yes/no) ").strip().lower()
+    elif extras != "no":
+        print("Invalid input, please answer with 'yes' or 'no'.")
+        other_users()
 
 def total():
-    for item in discount:
-        if(item[1] < 25):
-            item [1] in ticket_list (1-0.31)
-    print("okay your total will be {}".format( ticket_list))
+    total_price = 0
+    print("Passenger details:")
+    for idx, passenger in enumerate(passenger_data):
+        total_price += passenger["Ticket Price"]
+        print("Passenger {}: {}".format(idx + 1, passenger))
     
-    
+    print("Total price for all tickets: ${:.2f}".format(total_price))
+
 if __name__ == "__main__":
     starter()
-
-        
+    other_users()
+    total()
